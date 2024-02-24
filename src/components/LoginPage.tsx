@@ -19,8 +19,8 @@ const LoginPage = () => {
                     ) : (
 
                     <div>
-                        <p className='text-5xl font-semibold'>Login to campusbytes</p>
-                        <div className='w-full h-6 flex justify-center items-center mt-10 text-2xl font-medium'>
+                        <p className='text-5xl font-semibold'>Welcome to campusbytes Admin hub</p>
+                        <div className='w-full h-6 flex justify-center items-center mt-10 text-2xl font-medium '>
                         <LoginButton />
 
                         </div>

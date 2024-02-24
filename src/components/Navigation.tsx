@@ -13,7 +13,7 @@ import ChatManagement from "./ChatManagement";
 import CommentsManagement from "./CommentsManagement";
 import RatingsManagement from "./RatingsManagement";
 import ValidationManagement from "./ValidationManagement";
-const Navigation = () => {
+const   Navigation = () => {
     const { user, isLoading } = useAuth0();
     
     const navigate = useNavigate()
@@ -35,19 +35,41 @@ const Navigation = () => {
                             <img src={user?.picture} alt={user?.name} className="w-20 h-20 rounded-2xl mr-5"/>
                             <p>{user?.name}</p>
                         </div>
-                        <div>
+                        <div className=" m-5 ">
                             <ul>
-                                <li onClick={()=>{navigate('UserManagement')}}>User Management</li>
-                                <li onClick={()=>{navigate('ShopManagement')}}>Shop Management</li>
-                                <li onClick={()=>{navigate('DishManagement')}}>Dish Management</li>
-                                <li onClick={()=>{navigate('ProductManagement')}}>Product Management</li>
-                                <li onClick={()=>{navigate('CategoryManagement')}}>Category Management</li>
-                                <li onClick={()=>{navigate('MealTypeManager')}}>Meal Type Manager</li>
-                                <li onClick={()=>{navigate('OriginManagement')}}>Origin Management</li>
-                                <li onClick={()=>{navigate('ChatManagement')}}>Chat Management</li>
-                                <li onClick={()=>{navigate('CommentsManagement')}}>Comments Management</li>
-                                <li onClick={()=>{navigate('RatingsManagement')}}>Ratings Management</li>
-                                <li onClick={()=>{navigate('ValidationManagement')}}>Validation Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('UserManagement')}}>User Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('ShopManagement')}}>Shop Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('DishManagement')}}>Dish Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('ProductManagement')}}>Product Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('CategoryManagement')}}>Category Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('MealTypeManager')}}>Meal Type Manager</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('OriginManagement')}}>Origin Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('ChatManagement')}}>Chat Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('CommentsManagement')}}>Comments Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('RatingsManagement')}}>Ratings Management</li>
+                                <li 
+                                    className="navbar"
+                                    onClick={()=>{navigate('ValidationManagement')}}>Validation Management</li>
                             </ul>
                         </div>
                     </div>

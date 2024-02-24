@@ -5,14 +5,14 @@ import { Navigate } from "react-router-dom";
 
 
 
-const LoginButton = () => {
+const   LoginButton = () => {
     const { loginWithRedirect, isAuthenticated } = useAuth0();
 
     if (isAuthenticated) {
         return <Navigate to='/Home'/> 
     }
 
-    return <button className='navMenu' onClick={() => loginWithRedirect()}>Log In</button>;
+    return <button className='navMenu' onClick={() => loginWithRedirect()}>click to Login</button>;
 };
 
 export default LoginButton
