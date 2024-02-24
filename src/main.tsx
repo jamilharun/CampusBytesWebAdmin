@@ -4,6 +4,9 @@ import './index.css'
 import App from './App'
 import { Auth0Provider } from '@auth0/auth0-react'
 import auth0Config from './Api/auth0'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Auth0Provider
@@ -13,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       redirect_uri: window.location.origin
     }}
   >
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </Auth0Provider>,
   // <React.StrictMode>
   //   <App/>
