@@ -12,85 +12,52 @@ export default function ShopManagement() {
   const [error, setError] = useState(false);
   const [status, setStatus] = useState(false);
 
-  console.log('shop Management');
   
-  const debuging = async () => {
-    // its okay but somehow not working
+  
+  const fetchData = async () => {
+  const key = 'shop';
+  
     try {
-      const data = await sClient.fetch(fetchAllShops);
-      console.log('data retrieved from sanity', data);
-      // return data;
+      
+      const redRes = await grss(key);
+      if (!redRes || redRes.length == 0) {
+        console.log('Error in fetching data from redis', redRes);
+        const sanRes = await sanityFetch(fetchAllShops);
+        if (!sanRes) {
+          console.log('Error in fetching data from sanity', sanRes);
+          return null
+        } else {
+          console.log(`${sanRes.length} data retrieved from sanity`);
+          await Promise.all(sanRes?.map(async (d: any) => {
+          await arjd(d);
+          }));
+          return sanRes;
+        }
+      } else {
+        console.log(`${redRes.length} data retrieved from redis`);
+        return redRes;
+      }
     } catch (error) {
-      console.log('An error occurred:', error);
-      throw error; // Re-throw the error to propagate it to the calling code
+      const fE = `Error in fetching data from redis: ${error}`;
+      console.log(fE);
+      return null;    
     }
-
-    // testing redis
-    // console.log('fetching data from redis');
-    // try {
-    // const rData = await rClient.hGetAll('test:1');
-    // console.log(rData);
-    // } catch (error) {
-      
-    // }
   };
-  const YourComponent = () => {
-    debuging();
-    // const { data, isLoading, error } = useQuery('data', debuging);
+
+
+  const initialFetch = async () => {
+    const { data, isLoading, error} = useQuery('test', fetchData)
+    useEffect(() => {
+      if (data) {console.log(data);};
+
+      if (isLoading) {return setLoading(true);};
   
-    // useEffect(() => {
-    //   // Do something with the data, isLoading, and error
-    //   console.log(data, isLoading, error);
-    // }, [data, isLoading, error]);
-  
+      if (error) {return setError(true);};
+    },[data, isLoading, error]);
   };
-  
-  // const fetchData = async () => {
-  // const key = 'shop';
-  
-  //   try {
-      
-  //     const redRes = await grss(key);
-  //     if (!redRes || redRes.length == 0) {
-  //       console.log('Error in fetching data from redis', redRes);
-  //       const sanRes = await sanityFetch(fetchAllShops);
-  //       if (!sanRes) {
-  //         console.log('Error in fetching data from sanity', sanRes);
-  //         return null
-  //       } else {
-  //         console.log(`${sanRes.length} data retrieved from sanity`);
-  //         await Promise.all(sanRes?.map(async (d: any) => {
-  //         await arjd(d);
-  //         }));
-  //         return sanRes;
-  //       }
-  //     } else {
-  //       console.log(`${redRes.length} data retrieved from redis`);
-  //       return redRes;
-  //     }
-  //   } catch (error) {
-  //     const fE = `Error in fetching data from redis: ${error}`;
-  //     console.log(fE);
-  //     return null;    
-  //   }
-  // };
-
-
-  // const initialFetch = async () => {
-  //   const { data, isLoading, error} = useQuery('test', fetchData)
-  //   useEffect(() => {
-  //     if (data) {console.log(data);};
-
-  //     if (isLoading) {return setLoading(true);};
-  
-  //     if (error) {return setError(true);};
-  //   },[data, isLoading, error]);
-  // };
 
   useEffect(()  =>  {
-    // initialFetch();
-    // const data = fetchData()
-    // console.log(data);
+    initialFetch();
   },[shopData]);
 
   return (
@@ -133,7 +100,7 @@ export default function ShopManagement() {
         } */}
         <div>
           <button onClick={()=>{
-            YourComponent()
+            // basta button
           }}>
             button
           </button>
