@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-const rClient = createClient({
+const client = createClient({
     password: import.meta.env.VITE_REDIS_PASSWORD,
     socket: {
         host: import.meta.env.VITE_REDIS_HOST,
@@ -8,10 +8,11 @@ const rClient = createClient({
     }
 }); 
 
-rClient.on('connect', (con) => {console.log(con);});
+// rClient.on('error', (er) => {console.log(er);});
 
-if (!rClient.isOpen) {
-    rClient.connect();
+if (!client.isOpen) {
+    client.connect();
 }
+const rClient = client;
 
-export { rClient };
+export default rClient;
