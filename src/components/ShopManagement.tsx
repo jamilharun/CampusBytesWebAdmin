@@ -1,64 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { useQuery } from 'react-query';
-import { arjd, grss } from '../lib/Redis/rf';
-import { sanityFetch } from '../lib/Sanity/sf';
-import { fetchAllShops } from '../lib/Sanity/gq';
-import { sClient } from '../Api/sanity';
-import rClient from '../Api/redis';
+import { fetchAllShop} from '../lib/Sanity/sf';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function ShopManagement() {
   const [shopData, getShopData] = useState([]);
   const [Loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [err, setErr] = useState(false);
   const [status, setStatus] = useState(false);
+  const [search, setSearch] = useState('');
 
+  const queryClient = useQueryClient();
+
+  const { data: shops, isLoading, error, isFetching} = useQuery({ 
+    queryKey: ['shop'], 
+    queryFn: fetchAllShop,
+    gcTime: 10000,
+  });
   
+  console.log({isLoading, isFetching, error, shops});
   
-  const fetchData = async () => {
-  const key = 'shop';
-  
-    try {
-      
-      const redRes = await grss(key);
-      if (!redRes || redRes.length == 0) {
-        console.log('Error in fetching data from redis', redRes);
-        const sanRes = await sanityFetch(fetchAllShops);
-        if (!sanRes) {
-          console.log('Error in fetching data from sanity', sanRes);
-          return null
-        } else {
-          console.log(`${sanRes.length} data retrieved from sanity`);
-          await Promise.all(sanRes?.map(async (d: any) => {
-          await arjd(d);
-          }));
-          return sanRes;
-        }
-      } else {
-        console.log(`${redRes.length} data retrieved from redis`);
-        return redRes;
-      }
-    } catch (error) {
-      const fE = `Error in fetching data from redis: ${error}`;
-      console.log(fE);
-      return null;    
-    }
-  };
+  // const { mutateAsync: shopMutation } = useMutation({
+  //   mutationFn: ,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['shop'] })
+  //   },
+  // })
 
-
-  const initialFetch = async () => {
-    const { data, isLoading, error} = useQuery('test', fetchData)
-    useEffect(() => {
-      if (data) {console.log(data);};
-
-      if (isLoading) {return setLoading(true);};
-  
-      if (error) {return setError(true);};
-    },[data, isLoading, error]);
-  };
-
-  useEffect(()  =>  {
-    initialFetch();
-  },[shopData]);
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
@@ -66,6 +36,10 @@ export default function ShopManagement() {
         <h1 className='text-2xl font-medium'>Shop Management</h1>
       </div>
       <div>
+        <div>
+          <input type="text" placeholder="shopName" />
+          <button type='submit'>submit</button>
+        </div>
         <div className='grid grid-cols-12 gap-5'>
           <div>_id</div>
           <div>Shop Name</div>
@@ -80,24 +54,24 @@ export default function ShopManagement() {
           <div>_createdAt</div>
           <div>_updatedAt</div>
         </div>
-        {/* {
-          shopData.map((shop) => (
-            <div className='grid grid-cols-12 gap-5'>
-              <div>{shop._id}</div>
-              <div>{shop.shopName}</div>
-              <div>{shop.shopOwner}</div>
-              <div>{shop._type}</div>
-              <div>{shop.address}</div>
-              <div>{shop.latitude}</div>
-              <div>{shop.longitude}</div>
-              <div>{shop.isActive}</div>
-              <div>{shop.isFeatured}</div>
-              <div>{shop.isPromoted}</div>
-              <div>{shop._createdAt}</div>
-              <div>{shop._updatedAt}</div>
+        {
+          shops?.map((shop: any) => (
+            <div key={shop?._id}  className='grid grid-cols-12 gap-5'>
+              <div>{shop?._id}</div>
+              <div>{shop?.shopName}</div>
+              <div>{shop?.shopOwner}</div>
+              <div>{shop?._type}</div>
+              <div>{shop?.address}</div>
+              <div>{shop?.latitude}</div>
+              <div>{shop?.longitude}</div>
+              <div>{shop?.isActive}</div>
+              <div>{shop?.isFeatured}</div>
+              <div>{shop?.isPromoted}</div>
+              <div>{shop?._createdAt}</div>
+              <div>{shop?._updatedAt}</div>
             </div>
           ))
-        } */}
+        }
         <div>
           <button onClick={()=>{
             // basta button

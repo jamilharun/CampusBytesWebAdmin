@@ -1,4 +1,5 @@
 import { sClient } from "../../Api/sanity";
+import { fetchAllShops } from "./gq";
 
 export const sanityFetch = async (query: any) => {
     try {
@@ -7,7 +8,7 @@ export const sanityFetch = async (query: any) => {
           console.log('failed to fetch from Sanity.io:');
           return null;
         } else {
-          console.log('data retrieved from Sanity.io:');
+          console.log('data retrieved from Sanity.io:', data.length);
           return data;
         }
       } catch (error) {
@@ -29,4 +30,23 @@ export const sanityDelete = async (data: string) => {
         console.error('Error deleting shop data in Sanity.io:', error);
         throw error;
       }
+};
+
+//==================================
+//fetch
+export const fetchAllShop = async () => {
+  try {
+    const sanRes = await sanityFetch(fetchAllShops);
+    if (!sanRes) {
+      console.log('Error in fetching data from sanity', sanRes);
+      return null
+    } else {
+      console.log(`fetching successful`);
+      return sanRes;
+    }
+  } catch (error) {
+    const fE = `Error in fetching data from sanity: ${error}`;
+    console.log(fE);
+    return null;    
+  }
 };
