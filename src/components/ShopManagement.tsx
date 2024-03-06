@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { fetchAllShop} from '../lib/Sanity/sf';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function ShopManagement() {
@@ -11,13 +10,13 @@ export default function ShopManagement() {
 
   const queryClient = useQueryClient();
 
-  const { data: shops, isLoading, error, isFetching} = useQuery({ 
-    queryKey: ['shop'], 
-    queryFn: fetchAllShop,
-    gcTime: 10000,
-  });
+  // const { data: shops, isLoading, error, isFetching} = useQuery({ 
+  //   queryKey: ['shop'], 
+  //   queryFn: fetchAllShop,
+  //   gcTime: 10000,
+  // });
   
-  console.log({isLoading, isFetching, error, shops});
+  // console.log({isLoading, isFetching, error, shops});
   
   // const { mutateAsync: shopMutation } = useMutation({
   //   mutationFn: ,
@@ -26,9 +25,9 @@ export default function ShopManagement() {
   //   },
   // })
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>
+  // }
 
   return (
     <div>
@@ -54,7 +53,7 @@ export default function ShopManagement() {
           <div>_createdAt</div>
           <div>_updatedAt</div>
         </div>
-        {
+        {/* {
           shops?.map((shop: any) => (
             <div key={shop?._id}  className='grid grid-cols-12 gap-5'>
               <div>{shop?._id}</div>
@@ -71,7 +70,7 @@ export default function ShopManagement() {
               <div>{shop?._updatedAt}</div>
             </div>
           ))
-        }
+        } */}
         <div>
           <button onClick={()=>{
             // basta button
