@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function ShopManagement() {
   const [shopData, getShopData] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [err, setErr] = useState(false);
   const [status, setStatus] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const queryClient = useQueryClient();
 
-  // const { data: shops, isLoading, error, isFetching} = useQuery({ 
-  //   queryKey: ['shop'], 
+  // const { data: shops, isLoading, error, isFetching} = useQuery({
+  //   queryKey: ['shop'],
   //   queryFn: fetchAllShop,
   //   gcTime: 10000,
   // });
-  
+
   // console.log({isLoading, isFetching, error, shops});
-  
+
   // const { mutateAsync: shopMutation } = useMutation({
   //   mutationFn: ,
   //   onSuccess: () => {
@@ -31,27 +31,45 @@ export default function ShopManagement() {
 
   return (
     <div>
-      <div className='h-16 px-10 py-5 bg-slate-400 '>
-        <h1 className='text-2xl font-medium'>Shop Management</h1>
+      <div className="h-16 px-10 py-5 bg-slate-400 ">
+        <h1 className="text-2xl font-medium">Shop Management</h1>
       </div>
+      <br />
       <div>
-        <div>
-          <input type="text" placeholder="shopName" />
-          <button type='submit'>submit</button>
+        <div className="flex">
+          <input
+            type="text"
+            placeholder="Shop Name"
+            className="mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          >
+            Search
+          </button>
         </div>
-        <div className='grid grid-cols-12 gap-5'>
-          <div>_id</div>
-          <div>Shop Name</div>
-          <div>Shop Owner</div>
-          <div>_type</div>
-          <div>address</div>
-          <div>Latitude</div>
-          <div>Longitude</div>
-          <div>IsActive</div>
-          <div>isFeatured</div>
-          <div>isPromoted</div>
-          <div>_createdAt</div>
-          <div>_updatedAt</div>
+        <br />
+        <div>
+          <table className="min-w-full divide-y divide-gray-200 overflow-scroll">
+            <thead className="bg-gray-50">
+              <tr className="grid grid-cols-12 gap-5">
+                <th className="px-4 py-4">_id</th>
+                <th className="px-4 py-4">Shop Name</th>
+                <th className="px-4 py-4">Shop Owner</th>
+                <th className="px-4 py-4">_type</th>
+                <th className="px-4 py-4">Address</th>
+                <th className="px-4 py-4">Latitude</th>
+                <th className="px-4 py-4">Longitude</th>
+                <th className="px-4 py-4">IsActive</th>
+                <th className="px-4 py-4">IsFeatured</th>
+                <th className="px-4 py-4">IsPromoted</th>
+                <th className="px-4 py-4">_createdAt</th>
+                <th className="px-4 py-4">_updatedAt</th>
+              </tr>
+            </thead>
+            <tbody>{/* Add your table rows here */}</tbody>
+          </table>
         </div>
         {/* {
           shops?.map((shop: any) => (
@@ -72,13 +90,15 @@ export default function ShopManagement() {
           ))
         } */}
         <div>
-          <button onClick={()=>{
-            // basta button
-          }}>
+          <button
+            onClick={() => {
+              // basta button
+            }}
+          >
             button
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }
