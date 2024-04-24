@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchAllShop } from "../Api/server";
 
 export default function ShopManagement() {
   const [shopData, getShopData] = useState([]);
@@ -10,11 +11,11 @@ export default function ShopManagement() {
 
   const queryClient = useQueryClient();
 
-  // const { data: shops, isLoading, error, isFetching} = useQuery({
-  //   queryKey: ['shop'],
-  //   queryFn: fetchAllShop,
-  //   gcTime: 10000,
-  // });
+  const { data: shops, isLoading, error, isFetching} = useQuery({
+    queryKey: ['shop'],
+    queryFn: fetchAllShop,
+    gcTime: 10000,
+  });
 
   // console.log({isLoading, isFetching, error, shops});
 
@@ -36,7 +37,7 @@ export default function ShopManagement() {
       </div>
       <br />
       <div>
-        <div className="flex">
+        {/* <div className="flex">
           <input
             type="text"
             placeholder="Shop Name"
@@ -48,7 +49,7 @@ export default function ShopManagement() {
           >
             Search
           </button>
-        </div>
+        </div> */}
         <br />
         <div>
           <table className="min-w-full divide-y divide-gray-200 overflow-scroll">
@@ -64,14 +65,14 @@ export default function ShopManagement() {
                 <th className="px-4 py-4">IsActive</th>
                 <th className="px-4 py-4">IsFeatured</th>
                 <th className="px-4 py-4">IsPromoted</th>
-                <th className="px-4 py-4">_createdAt</th>
-                <th className="px-4 py-4">_updatedAt</th>
+                {/* <th className="px-4 py-4">_createdAt</th>
+                <th className="px-4 py-4">_updatedAt</th> */}
               </tr>
             </thead>
             <tbody>{/* Add your table rows here */}</tbody>
           </table>
         </div>
-        {/* {
+        {
           shops?.map((shop: any) => (
             <div key={shop?._id}  className='grid grid-cols-12 gap-5'>
               <div>{shop?._id}</div>
@@ -81,15 +82,15 @@ export default function ShopManagement() {
               <div>{shop?.address}</div>
               <div>{shop?.latitude}</div>
               <div>{shop?.longitude}</div>
-              <div>{shop?.isActive}</div>
-              <div>{shop?.isFeatured}</div>
-              <div>{shop?.isPromoted}</div>
-              <div>{shop?._createdAt}</div>
-              <div>{shop?._updatedAt}</div>
+              <div>{shop?.isActive ? 'TRUE' : 'FALSE'}</div>
+              <div>{shop?.isFeatured ? 'TRUE' : 'FALSE'}</div>
+              <div>{shop?.isPromoted ? 'TRUE' : 'FALSE'}</div>
+              {/* <div>{shop?._createdAt}</div>
+              <div>{shop?._updatedAt}</div> */}
             </div>
           ))
-        } */}
-        <div>
+        }
+        {/* <div>
           <button
             onClick={() => {
               // basta button
@@ -97,7 +98,7 @@ export default function ShopManagement() {
           >
             button
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

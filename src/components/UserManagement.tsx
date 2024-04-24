@@ -38,8 +38,8 @@ const UserManagement = () => {
                 <th>image</th>
                 {/* <th>Email</th> */}
                 <th>Password Hash</th>
-                <th>Phone Number</th>
-                <th>Roles</th>
+                {/* <th>Phone Number</th> */}
+                {/* <th>Roles</th> */}
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -58,7 +58,16 @@ const UserManagement = () => {
                   {/* <td>{user.image}</td> */}
                   <td className="overflow-hidden">{user.password_hash}</td>
                   <td className="overflow-hidden">{user.phoneNumber}</td>
-                  <td className="overflow-hidden">{user.roles}</td>
+                  {/* {
+                    user["https://myroles.com/roles"] ? (
+                      user["https://myroles.com/roles"].map(
+                        (role: any) => (
+                          <td className="overflow-hidden">{role}</td>
+                        )
+                      )
+                    ) : null
+                  } */}
+                  {/* <td className="overflow-hidden">{user.roles}</td> */}
                   <td className="overflow-hidden">{user.created_at}</td>
                   <td className="overflow-hidden">{user.updated_at}</td>
                 </tr>
