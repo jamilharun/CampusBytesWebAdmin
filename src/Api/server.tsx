@@ -52,3 +52,13 @@ export const updateOrder = async (order : any) => {
     throw error;
   }
 }
+
+export const fetchAllQueue = async () => {
+  try {
+    const response = await axios.get(`${ip}/api/sanity/all/shop/queue`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

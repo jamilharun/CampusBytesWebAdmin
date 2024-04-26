@@ -78,7 +78,7 @@ const Navigation = () => {
           <div>
             <Outlet />
             <Routes>
-              <Route path="/*" element={<OverView />} />
+              <Route path="/*" element={<UserManagement />} />
               <Route path="UserManagement" element={<UserManagement />} />
               <Route path="ShopManagement" element={<ShopManagement />} />
               
