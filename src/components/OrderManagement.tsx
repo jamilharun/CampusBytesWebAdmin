@@ -1,18 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { fetchAllOrder, updateOrder } from "../Api/server";
+import { fetchAllOrder, fetchAllQueue, updateOrder } from "../Api/server";
 
 export default function OrderManagement() {
   const [sortBy, setSortBy] = useState(null);
   const [sortAsc, setSortAsc] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedReport, setSelectedReport] = useState<string>('');
 
-  const { data: orders, isLoading, error, isFetching} = useQuery({
+  const { data: orders} = useQuery({
     queryKey: ['order'],
     queryFn: fetchAllOrder,
     gcTime: 10000,
   });
+
+  const {data: queue} = useQuery({
+    queryKey: ["fetchQueue"],
+    queryFn: fetchAllQueue,
+    gcTime: 10000,
+  });
+
 
 
   const handleOpenModal = (order : any) => {
@@ -32,6 +40,35 @@ export default function OrderManagement() {
     handleCloseModal();
   };
 
+  const getSelectedReport = () => {
+    if (selectedReport) {
+      // Find all orders that match the selected report
+      const matchingOrders = orders.filter((order: any) => order.shopref === selectedReport);
+      if (matchingOrders.length > 0) {
+        // Prepare the CSV content
+        let csvContent = "data:text/csv;charset=utf-8,";
+  
+        // Loop through matchingOrders and append each order's data to the CSV content
+        matchingOrders.forEach((order: any) => {
+          const rowData = Object.values(order).join(",") + "\n";
+          csvContent += encodeURIComponent(rowData);
+        });
+  
+        // Create a link element to trigger the download
+        const link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", `report${selectedReport}.csv`);
+        // Append the link to the body and trigger the download
+        document.body.appendChild(link);
+        link.click();
+      } else {
+        console.error("No orders found for the selected report");
+      }
+    } else {
+      console.error("No report selected");
+    }
+  };
+  
   
   return (
     <>
@@ -41,7 +78,20 @@ export default function OrderManagement() {
 
       {/* all order that has no payment reference */}
       <div  className="mt-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-medium">Get Report</h1>
+          <select value={selectedReport} onChange={(e) => setSelectedReport(e.target.value)}>
+            <option value="">Select a Report</option>
+            {
+              queue?.map((queue : any) => {
+                return <option key={queue?.shopid} value={`${queue?.shopid}`}>{queue?.shopid}</option>
+              })
+            }
+          </select>
+          <button onClick={getSelectedReport}>Get Selected Report</button>
+        </div>
         <h1 className="text-2xl font-medium">All incomplete orders</h1>
+        
         <table className="w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200">
           <tr className="">
@@ -111,7 +161,7 @@ export default function OrderManagement() {
           </thead>
           <tbody>
             {orders?.map((order : any) => (
-              <tr key={order._id} className="text-center border-b border-gray-300">
+              <tr key={order.checkoutid} className="text-center border-b border-gray-300">
                 <td className="px-4 py-2">{order.checkoutid}</td>
                 <td className="px-4 py-2">{order.paymentref}</td>
                 <td className="px-4 py-2">{order.userref}</td>
@@ -123,7 +173,8 @@ export default function OrderManagement() {
                 <td className="px-4 py-2">{order.isspecial ? 'Yes' : 'No'}</td>
                 <td className="px-4 py-2">{order.iscanceled ? 'Yes' : 'No'}</td>
                 <td className="px-4 py-2">{order.isfinished ? 'Yes' : 'No'}</td>
-                <td className="px-4 py-2">{new Date(order.createdat).toLocaleString()}</td>
+                <td className="px-4 py-2">{order.created_at}</td>
+                <td className="px-4 py-2">{new Date(order.created_at).toLocaleString()}</td>
               </tr>
             ))}
           </tbody>

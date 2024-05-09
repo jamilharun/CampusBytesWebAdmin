@@ -26,6 +26,7 @@ export const fetchAllShop = async () => {
 export const fetchAllOrder = async () => {
   try {
     const response = await axios.get(`${ip}/api/postgres/order/`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
