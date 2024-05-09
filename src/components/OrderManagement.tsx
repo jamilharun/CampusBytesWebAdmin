@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { fetchAllOrder, fetchAllQueue, updateOrder } from "../Api/server";
+import { jsPDF } from "jspdf";
+import 'jspdf-autotable';
 
 export default function OrderManagement() {
   const [sortBy, setSortBy] = useState(null);
@@ -40,27 +42,63 @@ export default function OrderManagement() {
     handleCloseModal();
   };
 
+  // const getSelectedReport = () => {
+  //   if (selectedReport) {
+  //     // Find all orders that match the selected report
+  //     const matchingOrders = orders.filter((order: any) => order.shopref === selectedReport);
+  //     if (matchingOrders.length > 0) {
+  //       // Prepare the CSV content
+  //       let csvContent = "data:text/csv;charset=utf-8,";
+  
+  //       // Loop through matchingOrders and append each order's data to the CSV content
+  //       matchingOrders.forEach((order: any) => {
+  //         const rowData = Object.values(order).join(",") + "\n";
+  //         csvContent += encodeURIComponent(rowData);
+  //       });
+  
+  //       // Create a link element to trigger the download
+  //       const link = document.createElement("a");
+  //       link.setAttribute("href", csvContent);
+  //       link.setAttribute("download", `report${selectedReport}.csv`);
+  //       // Append the link to the body and trigger the download
+  //       document.body.appendChild(link);
+  //       link.click();
+  //     } else {
+  //       console.error("No orders found for the selected report");
+  //     }
+  //   } else {
+  //     console.error("No report selected");
+  //   }
+  // };
+  
   const getSelectedReport = () => {
     if (selectedReport) {
       // Find all orders that match the selected report
-      const matchingOrders = orders.filter((order: any) => order.shopref === selectedReport);
+      const matchingOrders = orders.filter((order : any) => order.shopref === selectedReport);
       if (matchingOrders.length > 0) {
-        // Prepare the CSV content
-        let csvContent = "data:text/csv;charset=utf-8,";
-  
-        // Loop through matchingOrders and append each order's data to the CSV content
-        matchingOrders.forEach((order: any) => {
-          const rowData = Object.values(order).join(",") + "\n";
-          csvContent += encodeURIComponent(rowData);
+        // Create a new jsPDF instance
+        const doc = new jsPDF();
+        
+        // Define the columns for the table
+        const columns = Object.keys(matchingOrders[0]);
+        
+        // Define an empty array to store rows
+        const rows:any = [];
+        
+        // Loop through matchingOrders and push each order's data as a row
+        matchingOrders.forEach((order : any) => {
+          const rowData = Object.values(order);
+          rows.push(rowData);
         });
-  
-        // Create a link element to trigger the download
-        const link = document.createElement("a");
-        link.setAttribute("href", csvContent);
-        link.setAttribute("download", `report${selectedReport}.csv`);
-        // Append the link to the body and trigger the download
-        document.body.appendChild(link);
-        link.click();
+        
+        // Add the table to the PDF
+        doc.autoTable({
+          head: [columns],
+          body: rows
+        });
+        
+        // Save the PDF
+        doc.save(`report_${selectedReport}.pdf`);
       } else {
         console.error("No orders found for the selected report");
       }
@@ -68,7 +106,6 @@ export default function OrderManagement() {
       console.error("No report selected");
     }
   };
-  
   
   return (
     <>
@@ -128,7 +165,7 @@ export default function OrderManagement() {
                   <td className="px-4 py-2">{order.isspecial ? 'Yes' : 'No'}</td>
                   <td className="px-4 py-2">{order.iscanceled ? 'Yes' : 'No'}</td>
                   <td className="px-4 py-2">{order.isfinished ? 'Yes' : 'No'}</td>
-                  <td className="px-4 py-2">{new Date(order.createdat).toLocaleString()}</td>
+                  <td className="px-4 py-2">{new Date(order.created_at).toLocaleString()}</td>
                 </tr>
               ) : null
             ))}
